@@ -1639,8 +1639,3 @@ void SteeringBehavior::RenderAids( )
   }  
 
 }
-
-
-
-
-
