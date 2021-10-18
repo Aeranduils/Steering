@@ -70,8 +70,11 @@ GameWorld::GameWorld(int cx, int cy):
       Prm.MaxSpeed,             //max velocity
       Prm.MaxTurnRatePerSecond, //max turn rate
       Prm.VehicleScale);        //scale
+   pLeader->SetScale(Vector2D(10, 10));  
+   pLeader->SetMaxSpeed(70);
 
     m_Vehicles.push_back(pLeader);
+    
 
   //add it to the cell subdivision
   m_pCellSpace->AddEntity(pLeader);
@@ -79,33 +82,52 @@ GameWorld::GameWorld(int cx, int cy):
   /*
  * SETUP THE FOLLOWERS AGENTS
  */
-  for (int a=0; a<Prm.NumAgents; ++a)
+
+  Vehicle* pChaser1 = new ChaserAgent(this,
+      SpawnPos,                 //initial position
+      RandFloat() * TwoPi,        //start rotation
+      Vector2D(0, 0),            //velocity
+      Prm.VehicleMass,          //mass
+      Prm.MaxSteeringForce,     //max force
+      Prm.MaxSpeed,             //max velocity
+      Prm.MaxTurnRatePerSecond, //max turn rate
+      Prm.VehicleScale, pLeader);        //scale
+ 
+  m_Vehicles.push_back(pChaser1);
+
+  //add it to the cell subdivision
+  m_pCellSpace->AddEntity(pChaser1);
+
+  Vehicle* leader = pChaser1;
+
+  for (int a=1; a<Prm.NumAgents; ++a)
   {
 
       
     //determine a random starting position
     Vector2D SpawnPos = Vector2D(cx/2.0+RandomClamped()*cx/2.0,
                                  cy/2.0+RandomClamped()*cy/2.0);
-
-
-    Vehicle* pChaser = new ChaserAgent(this,
-                                    SpawnPos,                 //initial position
-                                    RandFloat()*TwoPi,        //start rotation
-                                    Vector2D(0,0),            //velocity
-                                    Prm.VehicleMass,          //mass
-                                    Prm.MaxSteeringForce,     //max force
-                                    Prm.MaxSpeed,             //max velocity
-                                    Prm.MaxTurnRatePerSecond, //max turn rate
-                                    Prm.VehicleScale, pLeader);        //scale
-
-   // pLeader = pChaser;
+    
+        Vehicle* pChaser = new ChaserAgent(this,
+            SpawnPos,                 //initial position
+            RandFloat() * TwoPi,        //start rotation
+            Vector2D(0, 0),            //velocity
+            Prm.VehicleMass,          //mass
+            Prm.MaxSteeringForce,     //max force
+            Prm.MaxSpeed,             //max velocity
+            Prm.MaxTurnRatePerSecond, //max turn rate
+            Prm.VehicleScale, leader);        //scale
+      
+    
     m_Vehicles.push_back(pChaser);
 
     //add it to the cell subdivision
     m_pCellSpace->AddEntity(pChaser);
+
+    leader = pChaser;
   }
 
-
+  /*
 #define SHOAL
 #ifdef SHOAL
   m_Vehicles[Prm.NumAgents-1]->Steering()->FlockingOff();
@@ -120,6 +142,7 @@ GameWorld::GameWorld(int cx, int cy):
 
   }
 #endif
+*/
  
   //create any obstacles or walls
   //CreateObstacles();

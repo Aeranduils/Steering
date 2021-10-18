@@ -20,25 +20,6 @@ public:
 
 	~LeaderAgent();
 
-	//updates the chaser's position and orientation
-	void        Update(double time_elapsed);
-
-	void        Render();
-
-
-	//-------------------------------------------accessor methods
-	SteeringBehavior* const  Steering()const { return m_pSteering; }
-	GameWorld* const         World()const { return m_pWorld; }
-
-
-	Vector2D    SmoothedHeading()const { return m_vSmoothedHeading; }
-
-	bool        isSmoothingOn()const { return m_bSmoothingOn; }
-	void        SmoothingOn() { m_bSmoothingOn = true; }
-	void        SmoothingOff() { m_bSmoothingOn = false; }
-	void        ToggleSmoothing() { m_bSmoothingOn = !m_bSmoothingOn; }
-
-	double       TimeElapsed()const { return m_dTimeElapsed; }
 
 private:
 
@@ -50,32 +31,6 @@ private:
 	SteeringBehavior* m_pSteering;
 
 
-	//some steering behaviors give jerky looking movement. The
-	//following members are used to smooth the vehicle's heading
-	Smoother<Vector2D>* m_pHeadingSmoother;
-
-	//this vector represents the average of the vehicle's heading
-	//vector smoothed over the last few frames
-	Vector2D             m_vSmoothedHeading;
-
-	//when true, smoothing is active
-	bool                  m_bSmoothingOn;
-
-
-	//keeps a track of the most recent update time. (some of the
-	//steering behaviors make use of this - see Wander)
-	double                m_dTimeElapsed;
-
-
-	//buffer for the vehicle shape
-	std::vector<Vector2D> m_vecLeaderAgentVB;
-
-	//fills the buffer with vertex data
-	void InitializeBuffer();
-
-	//disallow the copying of Vehicle types
-	LeaderAgent(const LeaderAgent&);
-	LeaderAgent& operator=(const LeaderAgent&);
 
 
 
