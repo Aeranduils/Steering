@@ -174,8 +174,8 @@ LRESULT CALLBACK WindowProc (HWND   hwnd,
 
 
           
-	case WM_DESTROY:
-	  {
+		 case WM_DESTROY:
+			 {
 
          //clean up our backbuffer objects
          SelectObject(hdcBackBuffer, hOldBitmap);
