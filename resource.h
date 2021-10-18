@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Script1.rc
+// fichier Include Microsoft Visual C++.
+// Utilisé par Script1.rc
 //
 #define IDR_MENU1                       101
 #define ID_AID_WANDER                   40001
@@ -18,13 +18,19 @@
 #define ID_VIEW_FPS                     40013
 #define ID_MENU_SMOOTHING               40014
 #define IDM_PARTITION_VIEW_NEIGHBORS    40015
+#define ID_CHANGEMODE_IAWANDERER        40016
+#define ID_CHANGEMODE_IAFLOCKING        40017
+#define ID_CHANGEMODE_HUMAN             40018
+#define ID_CHANGEMODE_IAFLOCKING40019   40019
+#define ID_CHANGEMODE_IAWANDER          40020
+#define ID_CHANGEMODE_HUMAN40021        40021
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        102
-#define _APS_NEXT_COMMAND_VALUE         40016
+#define _APS_NEXT_COMMAND_VALUE         40022
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

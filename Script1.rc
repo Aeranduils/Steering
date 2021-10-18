@@ -53,6 +53,12 @@ BEGIN
     BEGIN
         MENUITEM "On/Off",                      ID_MENU_SMOOTHING
     END
+    POPUP "Change monde"
+    BEGIN
+        MENUITEM "IA Wander", ID_CHANGEMODE_IAWANDER
+        MENUITEM "IA Flocking", ID_CHANGEMODE_IAFLOCKING
+        MENUITEM "Humain", ID_CHANGEMODE_HUMAN
+    END
 END
 
 

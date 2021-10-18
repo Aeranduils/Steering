@@ -43,7 +43,7 @@ ChaserAgent::ChaserAgent(GameWorld* world,
 
 //---------------------------- dtor -------------------------------------
 //-----------------------------------------------------------------------
-Vehicle::~Vehicle()
+ChaserAgent::~ChaserAgent()
 {
     delete m_pSteering;
     delete m_pHeadingSmoother;
@@ -53,7 +53,7 @@ Vehicle::~Vehicle()
 //
 //  Updates the vehicle's position from a series of steering behaviors
 //------------------------------------------------------------------------
-void Vehicle::Update(double time_elapsed)
+void ChaserAgent::Update(double time_elapsed)
 {
     //update the time elapsed
     m_dTimeElapsed = time_elapsed;
@@ -109,7 +109,7 @@ void Vehicle::Update(double time_elapsed)
 
 //-------------------------------- Render -------------------------------------
 //-----------------------------------------------------------------------------
-void Vehicle::Render()
+void ChaserAgent::Render()
 {
     //a vector to hold the transformed vertices
     static std::vector<Vector2D>  m_vecVehicleVBTrans;
@@ -139,7 +139,7 @@ void Vehicle::Render()
 
     if (isSmoothingOn())
     {
-        m_vecVehicleVBTrans = WorldTransform(m_vecVehicleVB,
+        m_vecVehicleVBTrans = WorldTransform(m_vecChaserAgentVB,
             Pos(),
             SmoothedHeading(),
             SmoothedHeading().Perp(),
@@ -148,7 +148,7 @@ void Vehicle::Render()
 
     else
     {
-        m_vecVehicleVBTrans = WorldTransform(m_vecVehicleVB,
+        m_vecVehicleVBTrans = WorldTransform(m_vecChaserAgentVB,
             Pos(),
             Heading(),
             Side(),
@@ -170,7 +170,7 @@ void Vehicle::Render()
 //
 //  fills the vehicle's shape buffer with its vertices
 //-----------------------------------------------------------------------------
-void Vehicle::InitializeBuffer()
+void ChaserAgent::InitializeBuffer()
 {
     const int NumVehicleVerts = 3;
 
@@ -181,6 +181,6 @@ void Vehicle::InitializeBuffer()
     //setup the vertex buffers and calculate the bounding radius
     for (int vtx = 0; vtx < NumVehicleVerts; ++vtx)
     {
-        m_vecVehicleVB.push_back(vehicle[vtx]);
+        m_vecChaserAgentVB.push_back(vehicle[vtx]);
     }
 }
