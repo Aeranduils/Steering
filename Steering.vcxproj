@@ -158,6 +158,7 @@
     <ClCompile Include="..\Common\Time\PrecisionTimer.cpp" />
     <ClCompile Include="ChaserAgent.cpp" />
     <ClCompile Include="GameWorld.cpp" />
+    <ClCompile Include="LeaderAgent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ParamLoader.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="EntityFunctionTemplates.h" />
     <ClInclude Include="GameWorld.h" />
+    <ClInclude Include="LeaderAgent.h" />
     <ClInclude Include="MovingEntity.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="ParamLoader.h" />

@@ -16,7 +16,7 @@ class ChaserAgent : public Vehicle
 			double    max_force,
 			double    max_speed,
 			double    max_turn_rate,
-			double    scale);
+			double    scale, Vehicle* p_leader);
 
 		~ChaserAgent();
 
