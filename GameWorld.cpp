@@ -627,6 +627,39 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
           CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAFLOCKING, pLeader->isFlockingOn());
           CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_HUMAN, pLeader->isHumanOn());
           break;
+
+      case ID_CHANGEOFFSET_10:
+          for (unsigned int i = 0; i < m_Vehicles.size(); ++i)
+          {
+              m_Vehicles[i]->setOffset(Vector2D(10, 0));
+          }
+
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_10, MFS_CHECKED);
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_5, MFS_UNCHECKED);
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_1, MFS_UNCHECKED);
+          break;
+
+      case ID_CHANGEOFFSET_5:
+          for (unsigned int i = 0; i < m_Vehicles.size(); ++i)
+          {
+              m_Vehicles[i]->setOffset(Vector2D(5,0));
+          }
+
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_10, MFS_UNCHECKED);
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_5, MFS_CHECKED);
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_1, MFS_UNCHECKED);
+          break;
+
+      case ID_CHANGEOFFSET_1:
+          for (unsigned int i = 0; i < m_Vehicles.size(); ++i)
+          {
+              m_Vehicles[i]->setOffset(Vector2D(1,0));
+          }
+
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_10, MFS_UNCHECKED);
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_5, MFS_UNCHECKED);
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_1, MFS_CHECKED);
+          break;
       
   }//end switch
 }

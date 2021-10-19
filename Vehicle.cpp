@@ -191,3 +191,7 @@ void Vehicle::InitializeBuffer()
     m_vecVehicleVB.push_back(vehicle[vtx]);
   }
 }
+
+void Vehicle::setOffset(Vector2D vector) {
+    Steering()->SetOffset(vector);
+}
