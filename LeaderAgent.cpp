@@ -34,7 +34,8 @@ LeaderAgent::LeaderAgent(GameWorld* world,
 
     //Comportements
     Steering()->FlockingOff();
-    Steering()->WanderOn();
+    Steering()->WanderOn();    
+    
 }
 
 
@@ -46,6 +47,58 @@ LeaderAgent::~LeaderAgent()
 
 }
 
+bool LeaderAgent::isWanderOn() {
+    return Steering()->isWanderOn();
+}
 
- 
+bool LeaderAgent::isFlockingOn() {
+    return Steering()->isFlockingOn();
+}
 
+void LeaderAgent::ToggleFlocking() {
+    if (Steering()->isFlockingOn()) {
+        Steering()->FlockingOff();
+    }
+    else {
+        Steering()->ArriveOff();
+        Steering()->WanderOff();
+        Steering()->FlockingOn();
+    }
+}
+
+void LeaderAgent::ToggleWandering() {
+    if (Steering()->isWanderOn()) {
+        Steering()->WanderOff();
+    }
+    else {
+        Steering()->ArriveOff();
+        Steering()->FlockingOff();
+        Steering()->WanderOn();        
+    }
+}
+
+void LeaderAgent::WanderOff() {
+    Steering()->WanderOff();
+}
+
+void LeaderAgent::FlockingOff() {
+    Steering()->FlockingOff();
+}
+
+bool LeaderAgent::isHumanOn() {
+    return !Steering()->isWanderOn() && !Steering()->isFlockingOn();
+}
+
+void LeaderAgent::ToggleHuman() {
+    if (Steering()->isWanderOn() || Steering()->isFlockingOn())
+    {
+        Steering()->WanderOff();
+        Steering()->FlockingOff();
+        Steering()->ArriveOn();
+    }
+    else{
+        Steering()->ArriveOff();
+        Steering()->FlockingOff();
+        Steering()->WanderOn();
+    }
+}

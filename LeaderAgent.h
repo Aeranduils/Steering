@@ -20,6 +20,21 @@ public:
 
 	~LeaderAgent();
 
+	void ToggleFlocking();
+
+	void ToggleWandering();
+
+	void FlockingOff();
+
+	void WanderOff();
+
+	bool isWanderOn();
+
+	bool isFlockingOn();
+
+	bool isHumanOn();
+
+	void ToggleHuman();
 
 private:
 

@@ -21,6 +21,7 @@
 using std::list;
 
 Vehicle* player;
+LeaderAgent* pLeader;
 
 //------------------------------- ctor -----------------------------------
 //------------------------------------------------------------------------
@@ -62,7 +63,7 @@ GameWorld::GameWorld(int cx, int cy):
       cy / 2.0 + RandomClamped() * cy / 2.0);
 
 
-  LeaderAgent* pLeader = new LeaderAgent(this,
+  pLeader = new LeaderAgent(this,
       SpawnPos,                 //initial position
       RandFloat() * TwoPi,        //start rotation
       Vector2D(0, 0),            //velocity
@@ -131,6 +132,7 @@ GameWorld::GameWorld(int cx, int cy):
     m_pCellSpace->AddEntity(pChaser);
 
     leader = pChaser;
+
   }
 
   /*
@@ -314,30 +316,38 @@ void GameWorld::HandleKeyPresses(WPARAM wParam)
   switch(wParam)
   {
   case 'W': {
-      m_vCrosshair.x = player->Pos().x;
-      m_vCrosshair.y = (player->Pos().y) - 10000;
-      player->Steering()->ArriveOn();
+      if (pLeader->isHumanOn())
+      {
+          m_vCrosshair.x = player->Pos().x;
+          m_vCrosshair.y = (player->Pos().y) - 1000;
+      }
       break;
   }
   
   case 'S': {
-      m_vCrosshair.x = player->Pos().x;
-      m_vCrosshair.y = (player->Pos().y) + 10000;
-      player->Steering()->ArriveOn();
+      if (pLeader->isHumanOn())
+      {
+          m_vCrosshair.x = player->Pos().x;
+          m_vCrosshair.y = (player->Pos().y) + 1000;
+      }
       break;
   }
   
   case 'A': {
-      m_vCrosshair.x = (player->Pos().x) - 10000;
-      m_vCrosshair.y = player->Pos().y;
-      player->Steering()->ArriveOn();
+      if (pLeader->isHumanOn())
+      {
+          m_vCrosshair.x = (player->Pos().x) -1000;
+          m_vCrosshair.y = player->Pos().y;
+      }
       break;
   }
  
   case 'D': {
-      m_vCrosshair.x = (player->Pos().x) + 10000;
-      m_vCrosshair.y = player->Pos().y;
-      player->Steering()->ArriveOn();
+      if (pLeader->isHumanOn())
+      {
+          m_vCrosshair.x = (player->Pos().x) + 1000;
+          m_vCrosshair.y = player->Pos().y;
+      }
       break;
   }
   case 'U':
@@ -595,6 +605,28 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
       }
 
       break;
+
+      case ID_CHANGEMODE_IAWANDER:
+          pLeader->ToggleWandering();
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAWANDER, pLeader->isWanderOn());
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAFLOCKING, pLeader->isFlockingOn());
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_HUMAN, pLeader->isHumanOn());
+          break;
+
+
+      case ID_CHANGEMODE_IAFLOCKING:
+          pLeader->ToggleFlocking();
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAWANDER, pLeader->isWanderOn());
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAFLOCKING, pLeader->isFlockingOn());
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_HUMAN, pLeader->isHumanOn());
+          break;
+
+      case ID_CHANGEMODE_HUMAN:
+          pLeader->ToggleHuman();
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAWANDER, pLeader->isWanderOn());
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAFLOCKING, pLeader->isFlockingOn());
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_HUMAN, pLeader->isHumanOn());
+          break;
       
   }//end switch
 }
