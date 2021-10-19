@@ -33,8 +33,7 @@ LeaderAgent::LeaderAgent(GameWorld* world,
 
 
     //Comportements
-   
-
+    Steering()->FlockingOff();
     Steering()->WanderOn();
 }
 

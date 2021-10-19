@@ -16,7 +16,7 @@ public:
 		double    max_force,
 		double    max_speed,
 		double    max_turn_rate,
-		double    scale, Vehicle* pLeader);
+		double    scale, Vehicle* pLeader, Vector2D offset);
 
 	~ChaserAgent();
 

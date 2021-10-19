@@ -35,6 +35,7 @@ class GameWorld
 { 
 private:
 
+
   //a container of all the moving entities
   std::vector<Vehicle*>         m_Vehicles;
 

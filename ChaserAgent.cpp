@@ -22,21 +22,17 @@ ChaserAgent::ChaserAgent(GameWorld* world,
     double    max_force,
     double    max_speed,
     double    max_turn_rate,
-    double    scale, Vehicle* pLeader) : Vehicle(world,position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale),
+    double    scale, Vehicle* pLeader, Vector2D offset) : Vehicle(world,position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale),
 
     m_pWorld(world)
   
 {
-   
-
     //set up the steering behavior class
     m_pSteering = new SteeringBehavior(this);
 
-    Steering()->FlockingOff();
-    Steering()->OffsetPursuitOn(pLeader, Vector2D(1, 1));
-
-   
-
+    Steering()->OffsetPursuitOn(pLeader, offset);
+    Steering()->SeparationOn();
+    //Steering()->SetSummingMethod(Steering()->weighted_average);
 }
 
 
@@ -45,6 +41,5 @@ ChaserAgent::ChaserAgent(GameWorld* world,
 ChaserAgent::~ChaserAgent()
 {
     delete m_pSteering;
-    
 }
 

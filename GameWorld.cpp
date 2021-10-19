@@ -20,6 +20,7 @@
 #include <list>
 using std::list;
 
+Vehicle* player;
 
 //------------------------------- ctor -----------------------------------
 //------------------------------------------------------------------------
@@ -71,7 +72,7 @@ GameWorld::GameWorld(int cx, int cy):
       Prm.MaxTurnRatePerSecond, //max turn rate
       Prm.VehicleScale);        //scale
    pLeader->SetScale(Vector2D(10, 10));  
-   pLeader->SetMaxSpeed(70);
+ 
 
     m_Vehicles.push_back(pLeader);
     
@@ -79,9 +80,13 @@ GameWorld::GameWorld(int cx, int cy):
   //add it to the cell subdivision
   m_pCellSpace->AddEntity(pLeader);
 
+  player = pLeader;
+
   /*
  * SETUP THE FOLLOWERS AGENTS
  */
+
+  Vector2D offset = Vector2D(RandomClamped()*10, RandomClamped()*10);
 
   Vehicle* pChaser1 = new ChaserAgent(this,
       SpawnPos,                 //initial position
@@ -91,7 +96,7 @@ GameWorld::GameWorld(int cx, int cy):
       Prm.MaxSteeringForce,     //max force
       Prm.MaxSpeed,             //max velocity
       Prm.MaxTurnRatePerSecond, //max turn rate
-      Prm.VehicleScale, pLeader);        //scale
+      Prm.VehicleScale, pLeader, Vector2D(2, 2));        //scale
  
   m_Vehicles.push_back(pChaser1);
 
@@ -102,7 +107,7 @@ GameWorld::GameWorld(int cx, int cy):
 
   for (int a=1; a<Prm.NumAgents; ++a)
   {
-
+      Vector2D offset = Vector2D(RandomClamped() * 10, RandomClamped() * 10);
       
     //determine a random starting position
     Vector2D SpawnPos = Vector2D(cx/2.0+RandomClamped()*cx/2.0,
@@ -116,9 +121,10 @@ GameWorld::GameWorld(int cx, int cy):
             Prm.MaxSteeringForce,     //max force
             Prm.MaxSpeed,             //max velocity
             Prm.MaxTurnRatePerSecond, //max turn rate
-            Prm.VehicleScale, leader);        //scale
-      
-    
+            Prm.VehicleScale, leader, Vector2D(2,2));        //scale
+
+       
+
     m_Vehicles.push_back(pChaser);
 
     //add it to the cell subdivision
@@ -299,12 +305,41 @@ void GameWorld::SetCrosshair(POINTS p)
 }
 
 
+
+
 //------------------------- HandleKeyPresses -----------------------------
 void GameWorld::HandleKeyPresses(WPARAM wParam)
 {
 
   switch(wParam)
   {
+  case 'W': {
+      m_vCrosshair.x = player->Pos().x;
+      m_vCrosshair.y = (player->Pos().y) - 10000;
+      player->Steering()->ArriveOn();
+      break;
+  }
+  
+  case 'S': {
+      m_vCrosshair.x = player->Pos().x;
+      m_vCrosshair.y = (player->Pos().y) + 10000;
+      player->Steering()->ArriveOn();
+      break;
+  }
+  
+  case 'A': {
+      m_vCrosshair.x = (player->Pos().x) - 10000;
+      m_vCrosshair.y = player->Pos().y;
+      player->Steering()->ArriveOn();
+      break;
+  }
+ 
+  case 'D': {
+      m_vCrosshair.x = (player->Pos().x) + 10000;
+      m_vCrosshair.y = player->Pos().y;
+      player->Steering()->ArriveOn();
+      break;
+  }
   case 'U':
     {
       delete m_pPath;
