@@ -18,13 +18,19 @@
 #define ID_VIEW_FPS                     40013
 #define ID_MENU_SMOOTHING               40014
 #define IDM_PARTITION_VIEW_NEIGHBORS    40015
+#define ID_CHANGEMODE_IAWANDER	        40016
+#define ID_CHANGEMODE_IAFLOCKING        40017
+#define ID_CHANGEMODE_HUMAN             40018
+#define ID_CHANGEOFFSET_10              40028
+#define ID_CHANGEOFFSET_5               40032
+#define ID_CHANGEOFFSET_1               40033
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        102
-#define _APS_NEXT_COMMAND_VALUE         40016
+#define _APS_NEXT_RESOURCE_VALUE        103
+#define _APS_NEXT_COMMAND_VALUE         40034
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

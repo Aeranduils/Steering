@@ -1,5 +1,7 @@
 #include "GameWorld.h"
 #include "Vehicle.h"
+#include "ChaserAgent.h"
+#include "LeaderAgent.h"
 #include "constants.h"
 #include "Obstacle.h"
 #include "2d/Geometry.h"
@@ -18,6 +20,8 @@
 #include <list>
 using std::list;
 
+Vehicle* player;
+LeaderAgent* pLeader;
 
 //------------------------------- ctor -----------------------------------
 //------------------------------------------------------------------------
@@ -48,34 +52,90 @@ GameWorld::GameWorld(int cx, int cy):
   double border = 30;
   m_pPath = new Path(5, border, border, cx-border, cy-border, true); 
 
-  //setup the agents
-  for (int a=0; a<Prm.NumAgents; ++a)
-  {
 
+
+  /*
+  * SETUP THE LEADER
+  */
+
+  //determine a random starting position
+  Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0,
+      cy / 2.0 + RandomClamped() * cy / 2.0);
+
+
+  pLeader = new LeaderAgent(this,
+      SpawnPos,                 //initial position
+      RandFloat() * TwoPi,        //start rotation
+      Vector2D(0, 0),            //velocity
+      Prm.VehicleMass,          //mass
+      Prm.MaxSteeringForce,     //max force
+      Prm.MaxSpeed,             //max velocity
+      Prm.MaxTurnRatePerSecond, //max turn rate
+      Prm.VehicleScale);        //scale
+   pLeader->SetScale(Vector2D(10, 10));  
+ 
+
+    m_Vehicles.push_back(pLeader);
+    
+
+  //add it to the cell subdivision
+  m_pCellSpace->AddEntity(pLeader);
+
+  player = pLeader;
+
+  /*
+ * SETUP THE FOLLOWERS AGENTS
+ */
+
+  Vector2D offset = Vector2D(RandomClamped()*10, RandomClamped()*10);
+
+  Vehicle* pChaser1 = new ChaserAgent(this,
+      SpawnPos,                 //initial position
+      RandFloat() * TwoPi,        //start rotation
+      Vector2D(0, 0),            //velocity
+      Prm.VehicleMass,          //mass
+      Prm.MaxSteeringForce,     //max force
+      Prm.MaxSpeed,             //max velocity
+      Prm.MaxTurnRatePerSecond, //max turn rate
+      Prm.VehicleScale, pLeader, Vector2D(2, 2));        //scale
+ 
+  m_Vehicles.push_back(pChaser1);
+
+  //add it to the cell subdivision
+  m_pCellSpace->AddEntity(pChaser1);
+
+  Vehicle* leader = pChaser1;
+
+  for (int a=1; a<Prm.NumAgents; ++a)
+  {
+      Vector2D offset = Vector2D(RandomClamped() * 10, RandomClamped() * 10);
+      
     //determine a random starting position
     Vector2D SpawnPos = Vector2D(cx/2.0+RandomClamped()*cx/2.0,
                                  cy/2.0+RandomClamped()*cy/2.0);
+    
+        Vehicle* pChaser = new ChaserAgent(this,
+            SpawnPos,                 //initial position
+            RandFloat() * TwoPi,        //start rotation
+            Vector2D(0, 0),            //velocity
+            Prm.VehicleMass,          //mass
+            Prm.MaxSteeringForce,     //max force
+            Prm.MaxSpeed,             //max velocity
+            Prm.MaxTurnRatePerSecond, //max turn rate
+            Prm.VehicleScale, leader, Vector2D(2,2));        //scale
 
+       
 
-    Vehicle* pVehicle = new Vehicle(this,
-                                    SpawnPos,                 //initial position
-                                    RandFloat()*TwoPi,        //start rotation
-                                    Vector2D(0,0),            //velocity
-                                    Prm.VehicleMass,          //mass
-                                    Prm.MaxSteeringForce,     //max force
-                                    Prm.MaxSpeed,             //max velocity
-                                    Prm.MaxTurnRatePerSecond, //max turn rate
-                                    Prm.VehicleScale);        //scale
-
-    pVehicle->Steering()->FlockingOn();
-
-    m_Vehicles.push_back(pVehicle);
+    m_Vehicles.push_back(pChaser);
 
     //add it to the cell subdivision
-    m_pCellSpace->AddEntity(pVehicle);
+    m_pCellSpace->AddEntity(pChaser);
+
+    leader = pChaser;
+
   }
 
-
+  /*
 #define SHOAL
 #ifdef SHOAL
   m_Vehicles[Prm.NumAgents-1]->Steering()->FlockingOff();
@@ -90,6 +150,7 @@ GameWorld::GameWorld(int cx, int cy):
 
   }
 #endif
+*/
  
   //create any obstacles or walls
   //CreateObstacles();
@@ -246,12 +307,49 @@ void GameWorld::SetCrosshair(POINTS p)
 }
 
 
+
+
 //------------------------- HandleKeyPresses -----------------------------
 void GameWorld::HandleKeyPresses(WPARAM wParam)
 {
 
   switch(wParam)
   {
+  case 'W': {
+      if (pLeader->isHumanOn())
+      {
+          m_vCrosshair.x = player->Pos().x;
+          m_vCrosshair.y = (player->Pos().y) - 1000;
+      }
+      break;
+  }
+  
+  case 'S': {
+      if (pLeader->isHumanOn())
+      {
+          m_vCrosshair.x = player->Pos().x;
+          m_vCrosshair.y = (player->Pos().y) + 1000;
+      }
+      break;
+  }
+  
+  case 'A': {
+      if (pLeader->isHumanOn())
+      {
+          m_vCrosshair.x = (player->Pos().x) -1000;
+          m_vCrosshair.y = player->Pos().y;
+      }
+      break;
+  }
+ 
+  case 'D': {
+      if (pLeader->isHumanOn())
+      {
+          m_vCrosshair.x = (player->Pos().x) + 1000;
+          m_vCrosshair.y = player->Pos().y;
+      }
+      break;
+  }
   case 'U':
     {
       delete m_pPath;
@@ -507,6 +605,61 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
       }
 
       break;
+
+      case ID_CHANGEMODE_IAWANDER:
+          pLeader->ToggleWandering();
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAWANDER, pLeader->isWanderOn());
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAFLOCKING, pLeader->isFlockingOn());
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_HUMAN, pLeader->isHumanOn());
+          break;
+
+
+      case ID_CHANGEMODE_IAFLOCKING:
+          pLeader->ToggleFlocking();
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAWANDER, pLeader->isWanderOn());
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAFLOCKING, pLeader->isFlockingOn());
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_HUMAN, pLeader->isHumanOn());
+          break;
+
+      case ID_CHANGEMODE_HUMAN:
+          pLeader->ToggleHuman();
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAWANDER, pLeader->isWanderOn());
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAFLOCKING, pLeader->isFlockingOn());
+          CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_HUMAN, pLeader->isHumanOn());
+          break;
+
+      case ID_CHANGEOFFSET_10:
+          for (unsigned int i = 0; i < m_Vehicles.size(); ++i)
+          {
+              m_Vehicles[i]->setOffset(Vector2D(10, 0));
+          }
+
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_10, MFS_CHECKED);
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_5, MFS_UNCHECKED);
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_1, MFS_UNCHECKED);
+          break;
+
+      case ID_CHANGEOFFSET_5:
+          for (unsigned int i = 0; i < m_Vehicles.size(); ++i)
+          {
+              m_Vehicles[i]->setOffset(Vector2D(5,0));
+          }
+
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_10, MFS_UNCHECKED);
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_5, MFS_CHECKED);
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_1, MFS_UNCHECKED);
+          break;
+
+      case ID_CHANGEOFFSET_1:
+          for (unsigned int i = 0; i < m_Vehicles.size(); ++i)
+          {
+              m_Vehicles[i]->setOffset(Vector2D(1,0));
+          }
+
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_10, MFS_UNCHECKED);
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_5, MFS_UNCHECKED);
+          ChangeMenuState(hwnd, ID_CHANGEOFFSET_1, MFS_CHECKED);
+          break;
       
   }//end switch
 }

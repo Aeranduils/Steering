@@ -1,14 +1,14 @@
-#ifndef CHASER_AGENT_H
-#define CHASER_AGENT_H
+#ifndef LEADER_AGENT_H
+#define LEADER_AGENT_H
 
 #include "Vehicle.h"
 
 
-class ChaserAgent : public Vehicle
+class LeaderAgent : public Vehicle
 {
 public:
 
-	ChaserAgent(GameWorld* world,
+	LeaderAgent(GameWorld* world,
 		Vector2D position,
 		double    rotation,
 		Vector2D velocity,
@@ -16,13 +16,25 @@ public:
 		double    max_force,
 		double    max_speed,
 		double    max_turn_rate,
-		double    scale, Vehicle* pLeader, Vector2D offset);
+		double    scale);
 
-	~ChaserAgent();
+	~LeaderAgent();
 
+	void ToggleFlocking();
 
+	void ToggleWandering();
 
-	
+	void FlockingOff();
+
+	void WanderOff();
+
+	bool isWanderOn();
+
+	bool isFlockingOn();
+
+	bool isHumanOn();
+
+	void ToggleHuman();
 
 private:
 
@@ -32,6 +44,12 @@ private:
 
 	//the steering behavior class
 	SteeringBehavior* m_pSteering;
+
+
+
+
+
+
 
 };
 

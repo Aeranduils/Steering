@@ -83,6 +83,7 @@ public:
 
   void        Render();
 
+  void        setOffset(Vector2D vector);
                                                                           
   //-------------------------------------------accessor methods
   SteeringBehavior*const  Steering()const{return m_pSteering;}
@@ -95,6 +96,7 @@ public:
   void        SmoothingOn(){m_bSmoothingOn = true;}
   void        SmoothingOff(){m_bSmoothingOn = false;}
   void        ToggleSmoothing(){m_bSmoothingOn = !m_bSmoothingOn;}
+
   
   double       TimeElapsed()const{return m_dTimeElapsed;}
  

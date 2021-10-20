@@ -22,22 +22,17 @@ ChaserAgent::ChaserAgent(GameWorld* world,
     double    max_force,
     double    max_speed,
     double    max_turn_rate,
-    double    scale) : Vehicle(world,position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale),
+    double    scale, Vehicle* pLeader, Vector2D offset) : Vehicle(world,position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale),
 
-    m_pWorld(world),
-    m_vSmoothedHeading(Vector2D(0, 0)),
-    m_bSmoothingOn(false),
-    m_dTimeElapsed(0.0)
+    m_pWorld(world)
+  
 {
-    InitializeBuffer();
-
     //set up the steering behavior class
     m_pSteering = new SteeringBehavior(this);
 
-    //set up the smoother
-    m_pHeadingSmoother = new Smoother<Vector2D>(Prm.NumSamplesForSmoothing, Vector2D(0.0, 0.0));
-
-
+    Steering()->OffsetPursuitOn(pLeader, offset);
+    Steering()->SeparationOn();
+    //Steering()->SetSummingMethod(Steering()->weighted_average);
 }
 
 
@@ -46,14 +41,13 @@ ChaserAgent::ChaserAgent(GameWorld* world,
 Vehicle::~Vehicle()
 {
     delete m_pSteering;
-    delete m_pHeadingSmoother;
 }
 
 //------------------------------ Update ----------------------------------
 //
 //  Updates the vehicle's position from a series of steering behaviors
 //------------------------------------------------------------------------
-void Vehicle::Update(double time_elapsed)
+void ChaserAgent::Update(double time_elapsed)
 {
     //update the time elapsed
     m_dTimeElapsed = time_elapsed;
@@ -109,7 +103,7 @@ void Vehicle::Update(double time_elapsed)
 
 //-------------------------------- Render -------------------------------------
 //-----------------------------------------------------------------------------
-void Vehicle::Render()
+void ChaserAgent::Render()
 {
     //a vector to hold the transformed vertices
     static std::vector<Vector2D>  m_vecVehicleVBTrans;
@@ -139,7 +133,7 @@ void Vehicle::Render()
 
     if (isSmoothingOn())
     {
-        m_vecVehicleVBTrans = WorldTransform(m_vecVehicleVB,
+        m_vecVehicleVBTrans = WorldTransform(m_vecChaserAgentVB,
             Pos(),
             SmoothedHeading(),
             SmoothedHeading().Perp(),
@@ -148,7 +142,7 @@ void Vehicle::Render()
 
     else
     {
-        m_vecVehicleVBTrans = WorldTransform(m_vecVehicleVB,
+        m_vecVehicleVBTrans = WorldTransform(m_vecChaserAgentVB,
             Pos(),
             Heading(),
             Side(),
@@ -170,7 +164,7 @@ void Vehicle::Render()
 //
 //  fills the vehicle's shape buffer with its vertices
 //-----------------------------------------------------------------------------
-void Vehicle::InitializeBuffer()
+void ChaserAgent::InitializeBuffer()
 {
     const int NumVehicleVerts = 3;
 
@@ -181,6 +175,6 @@ void Vehicle::InitializeBuffer()
     //setup the vertex buffers and calculate the bounding radius
     for (int vtx = 0; vtx < NumVehicleVerts; ++vtx)
     {
-        m_vecVehicleVB.push_back(vehicle[vtx]);
+        m_vecChaserAgentVB.push_back(vehicle[vtx]);
     }
 }
