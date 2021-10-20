@@ -24,18 +24,18 @@ LeaderAgent::LeaderAgent(GameWorld* world,
     double    max_turn_rate,
     double    scale) : Vehicle(world, position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale),
 
-   m_pWorld(world)
-  
+    m_pWorld(world)
+
 {
-    
+
     //set up the steering behavior class
     m_pSteering = new SteeringBehavior(this);
 
 
     //Comportements
     Steering()->FlockingOff();
-    Steering()->WanderOn();    
-    
+    Steering()->WanderOn();
+
 }
 
 
@@ -73,7 +73,7 @@ void LeaderAgent::ToggleWandering() {
     else {
         Steering()->ArriveOff();
         Steering()->FlockingOff();
-        Steering()->WanderOn();        
+        Steering()->WanderOn();
     }
 }
 
@@ -96,7 +96,7 @@ void LeaderAgent::ToggleHuman() {
         Steering()->FlockingOff();
         Steering()->ArriveOn();
     }
-    else{
+    else {
         Steering()->ArriveOff();
         Steering()->FlockingOff();
         Steering()->WanderOn();
