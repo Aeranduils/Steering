@@ -98,13 +98,16 @@ GameWorld::GameWorld(int cx, int cy):
       Prm.MaxSpeed,             //max velocity
       Prm.MaxTurnRatePerSecond, //max turn rate
       Prm.VehicleScale, pLeader, Vector2D(2, 2));        //scale
- 
+
+	pLeader->setColor(1);
+
   m_Vehicles.push_back(pChaser1);
 
   //add it to the cell subdivision
   m_pCellSpace->AddEntity(pChaser1);
 
   Vehicle* leader = pChaser1;
+  leader->setColor(2);
 
   for (int a=1; a<Prm.NumAgents; ++a)
   {
@@ -133,6 +136,7 @@ GameWorld::GameWorld(int cx, int cy):
 
     leader = pChaser;
 
+    leader->setColor(2);
   }
 
   /*

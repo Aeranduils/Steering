@@ -162,6 +162,8 @@ void Vehicle::Render()
                                          Scale());
   }
 
+  if (getColor() == 1) gdi->RedPen();
+  else if (getColor() == 2) gdi->GreenPen();
 
   gdi->ClosedShape(m_vecVehicleVBTrans);
  
