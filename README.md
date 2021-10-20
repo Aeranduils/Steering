@@ -11,6 +11,7 @@
  - Groupe  de  20  agents-poursuiveurs derrière un seul agent leader
  - Agent-leader  dont  le  comportement  n’est  plus  aléatoire  mais  contrôlé  par  un joueur-humain avec les touches WASD
  - Différents  choix  de  paramètres  de contrôle du jeu (leader IA, leader humain, offset) disponible via une interface graphique
+ - Différentes couleurs pour identifier les types d'agents
 
 #-----Problèmes non résolues-----#
  
