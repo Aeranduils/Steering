@@ -20,6 +20,12 @@ public:
 
 	~ChaserAgent();
 
+	void setOffset(Vector2D offset);
+	void setLeader(Vehicle* leader);
+
+	Vector2D offset;
+	Vehicle* leader;
+
 
 
 

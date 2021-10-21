@@ -75,12 +75,15 @@ public:
 
 	~Vehicle();
 
+	Vehicle* leader;
+
 	//updates the vehicle's position and orientation
 	void Update(double time_elapsed);
 
 	void Render();
 
 	void setOffset(Vector2D vector);
+	void setLeader(Vehicle* leader);
 
 	//-------------------------------------------accessor methods
 	SteeringBehavior* const Steering() const { return m_pSteering; }

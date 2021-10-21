@@ -197,3 +197,7 @@ void Vehicle::InitializeBuffer()
 void Vehicle::setOffset(Vector2D vector) {
     Steering()->SetOffset(vector);
 }
+
+void Vehicle::setLeader(Vehicle* leader) {
+    Vehicle::leader = leader;
+}

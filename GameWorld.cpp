@@ -22,101 +22,104 @@ using std::list;
 
 Vehicle* player;
 LeaderAgent* pLeader;
+bool isHumanAlready = false;
 
 //------------------------------- ctor -----------------------------------
 //------------------------------------------------------------------------
-GameWorld::GameWorld(int cx, int cy):
+GameWorld::GameWorld(int cx, int cy) :
 
-            m_cxClient(cx),
-            m_cyClient(cy),
-            m_bPaused(false),
-            m_vCrosshair(Vector2D(cxClient()/2.0, cxClient()/2.0)),
-            m_bShowWalls(false),
-            m_bShowObstacles(false),
-            m_bShowPath(false),
-            m_bShowWanderCircle(false),
-            m_bShowSteeringForce(false),
-            m_bShowFeelers(false),
-            m_bShowDetectionBox(false),
-            m_bShowFPS(true),
-            m_dAvFrameTime(0),
-            m_pPath(NULL),
-            m_bRenderNeighbors(false),
-            m_bViewKeys(false),
-            m_bShowCellSpaceInfo(false)
+    m_cxClient(cx),
+    m_cyClient(cy),
+    m_bPaused(false),
+    m_vCrosshair(Vector2D(cxClient() / 2.0, cxClient() / 2.0)),
+    m_bShowWalls(false),
+    m_bShowObstacles(false),
+    m_bShowPath(false),
+    m_bShowWanderCircle(false),
+    m_bShowSteeringForce(false),
+    m_bShowFeelers(false),
+    m_bShowDetectionBox(false),
+    m_bShowFPS(true),
+    m_dAvFrameTime(0),
+    m_pPath(NULL),
+    m_bRenderNeighbors(false),
+    m_bViewKeys(false),
+    m_bShowCellSpaceInfo(false)
 {
 
-  //setup the spatial subdivision class
-  m_pCellSpace = new CellSpacePartition<Vehicle*>((double)cx, (double)cy, Prm.NumCellsX, Prm.NumCellsY, Prm.NumAgents);
+    //setup the spatial subdivision class
+    m_pCellSpace = new CellSpacePartition<Vehicle*>((double)cx, (double)cy, Prm.NumCellsX, Prm.NumCellsY, Prm.NumAgents);
 
-  double border = 30;
-  m_pPath = new Path(5, border, border, cx-border, cy-border, true); 
-
-
-
-  /*
-  * SETUP THE LEADER
-  */
-
-  //determine a random starting position
-  Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0,
-      cy / 2.0 + RandomClamped() * cy / 2.0);
+    double border = 30;
+    m_pPath = new Path(5, border, border, cx - border, cy - border, true);
 
 
-  pLeader = new LeaderAgent(this,
-      SpawnPos,                 //initial position
-      RandFloat() * TwoPi,        //start rotation
-      Vector2D(0, 0),            //velocity
-      Prm.VehicleMass,          //mass
-      Prm.MaxSteeringForce,     //max force
-      Prm.MaxSpeed,             //max velocity
-      Prm.MaxTurnRatePerSecond, //max turn rate
-      Prm.VehicleScale);        //scale
-   pLeader->SetScale(Vector2D(10, 10));  
- 
+
+    /*
+    * SETUP THE LEADER
+    */
+    
+
+    //determine a random starting position
+    Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0,
+        cy / 2.0 + RandomClamped() * cy / 2.0);
+
+
+    pLeader = new LeaderAgent(this,
+        SpawnPos,                 //initial position
+        RandFloat() * TwoPi,        //start rotation
+        Vector2D(0, 0),            //velocity
+        Prm.VehicleMass,          //mass
+        Prm.MaxSteeringForce,     //max force
+        Prm.MaxSpeed,             //max velocity
+        Prm.MaxTurnRatePerSecond, //max turn rate
+        Prm.VehicleScale);        //scale
+    pLeader->SetScale(Vector2D(10, 10));
+
 
     m_Vehicles.push_back(pLeader);
-    
 
-  //add it to the cell subdivision
-  m_pCellSpace->AddEntity(pLeader);
 
-  player = pLeader;
+    //add it to the cell subdivision
+    m_pCellSpace->AddEntity(pLeader);
 
-  /*
- * SETUP THE FOLLOWERS AGENTS
- */
+    player = pLeader;
 
-  Vector2D offset = Vector2D(RandomClamped()*10, RandomClamped()*10);
+    /*
+   * SETUP THE FOLLOWERS AGENTS
+   */
 
-  Vehicle* pChaser1 = new ChaserAgent(this,
-      SpawnPos,                 //initial position
-      RandFloat() * TwoPi,        //start rotation
-      Vector2D(0, 0),            //velocity
-      Prm.VehicleMass,          //mass
-      Prm.MaxSteeringForce,     //max force
-      Prm.MaxSpeed,             //max velocity
-      Prm.MaxTurnRatePerSecond, //max turn rate
-      Prm.VehicleScale, pLeader, Vector2D(2, 2));        //scale
+    if (!pLeader->isHumanOn()) {}
+    Vector2D offset = Vector2D(RandomClamped() * 10, RandomClamped() * 10);
 
-	pLeader->setColor(1);
+    Vehicle* pChaser = new ChaserAgent(this,
+        SpawnPos,                 //initial position
+        RandFloat() * TwoPi,        //start rotation
+        Vector2D(0, 0),            //velocity
+        Prm.VehicleMass,          //mass
+        Prm.MaxSteeringForce,     //max force
+        Prm.MaxSpeed,             //max velocity
+        Prm.MaxTurnRatePerSecond, //max turn rate
+        Prm.VehicleScale, pLeader, Vector2D(2, 2));        //scale
 
-  m_Vehicles.push_back(pChaser1);
+    pLeader->setColor(1);
 
-  //add it to the cell subdivision
-  m_pCellSpace->AddEntity(pChaser1);
+    m_Vehicles.push_back(pChaser);
 
-  Vehicle* leader = pChaser1;
-  leader->setColor(2);
+    //add it to the cell subdivision
+    m_pCellSpace->AddEntity(pChaser);
 
-  for (int a=1; a<Prm.NumAgents; ++a)
-  {
-      Vector2D offset = Vector2D(RandomClamped() * 10, RandomClamped() * 10);
-      
-    //determine a random starting position
-    Vector2D SpawnPos = Vector2D(cx/2.0+RandomClamped()*cx/2.0,
-                                 cy/2.0+RandomClamped()*cy/2.0);
-    
+    Vehicle* leader = pChaser;
+    leader->setColor(2);
+
+    for (int a = 1; a < Prm.NumAgents; ++a)
+    {
+        Vector2D offset = Vector2D(RandomClamped() * 10, RandomClamped() * 10);
+
+        //determine a random starting position
+        Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0,
+            cy / 2.0 + RandomClamped() * cy / 2.0);
+
         Vehicle* pChaser = new ChaserAgent(this,
             SpawnPos,                 //initial position
             RandFloat() * TwoPi,        //start rotation
@@ -125,20 +128,21 @@ GameWorld::GameWorld(int cx, int cy):
             Prm.MaxSteeringForce,     //max force
             Prm.MaxSpeed,             //max velocity
             Prm.MaxTurnRatePerSecond, //max turn rate
-            Prm.VehicleScale, leader, Vector2D(2,2));        //scale
+            Prm.VehicleScale, leader, Vector2D(2, 2));        //scale
 
-       
 
-    m_Vehicles.push_back(pChaser);
 
-    //add it to the cell subdivision
-    m_pCellSpace->AddEntity(pChaser);
+        m_Vehicles.push_back(pChaser);
 
-    leader = pChaser;
+        //add it to the cell subdivision
+        m_pCellSpace->AddEntity(pChaser);
 
-    leader->setColor(2);
-  }
+        leader = pChaser;
 
+        leader->setColor(2);
+    }
+    
+}
   /*
 #define SHOAL
 #ifdef SHOAL
@@ -159,7 +163,7 @@ GameWorld::GameWorld(int cx, int cy):
   //create any obstacles or walls
   //CreateObstacles();
   //CreateWalls();
-}
+
 
 
 //-------------------------------- dtor ----------------------------------
@@ -185,21 +189,45 @@ GameWorld::~GameWorld()
 //----------------------------- Update -----------------------------------
 //------------------------------------------------------------------------
 void GameWorld::Update(double time_elapsed)
-{ 
-  if (m_bPaused) return;
+{
+    if (m_bPaused) return;
 
-  //create a smoother to smooth the framerate
-  const int SampleRate = 10;
-  static Smoother<double> FrameRateSmoother(SampleRate, 0.0);
+    //create a smoother to smooth the framerate
+    const int SampleRate = 10;
+    static Smoother<double> FrameRateSmoother(SampleRate, 0.0);
 
-  m_dAvFrameTime = FrameRateSmoother.Update(time_elapsed);
-  
+    m_dAvFrameTime = FrameRateSmoother.Update(time_elapsed);
 
-  //update the vehicles
-  for (unsigned int a=0; a<m_Vehicles.size(); ++a)
-  {
-    m_Vehicles[a]->Update(time_elapsed);
-  }
+
+    //update the vehicles
+    for (unsigned int a = 0; a < m_Vehicles.size(); ++a)
+    {
+        m_Vehicles[a]->Update(time_elapsed);
+    }
+
+    
+    if (pLeader->isHumanOn())
+    {
+        isHumanAlready = true;
+        if (isHumanAlready) {
+
+            for (int i = 0; i < Prm.NumAgents+1; ++i)
+            {
+                //On modifie le leader et l'offset
+                Vector2D offset = Vector2D(40.0 * cos((double)(i) / m_Vehicles.size() * TwoPi), 40.0 * sin((double)(i) / m_Vehicles.size() * TwoPi));
+                m_Vehicles[i]->Steering()->OffsetPursuitOn(pLeader, offset);
+
+            }
+             
+        }
+        isHumanAlready = false;
+
+        
+
+    }
+
+
+
 }
   
 
@@ -319,11 +347,24 @@ void GameWorld::HandleKeyPresses(WPARAM wParam)
 
   switch(wParam)
   {
-  case 'W': {
+  case 'Q': {
       if (pLeader->isHumanOn())
       {
           m_vCrosshair.x = player->Pos().x;
+          m_vCrosshair.y = player->Pos().y;
+          pLeader->SetMaxSpeed(0);
+          pLeader->SetMaxForce(0);
+      }
+      break;
+  }
+  case 'W': {
+      if (pLeader->isHumanOn())
+      {
+          pLeader->SetMaxSpeed(Prm.MaxSpeed);
+          pLeader->SetMaxForce(Prm.MaxSteeringForce);
+          m_vCrosshair.x = player->Pos().x;
           m_vCrosshair.y = (player->Pos().y) - 1000;
+
       }
       break;
   }
@@ -331,6 +372,8 @@ void GameWorld::HandleKeyPresses(WPARAM wParam)
   case 'S': {
       if (pLeader->isHumanOn())
       {
+          pLeader->SetMaxSpeed(Prm.MaxSpeed);
+          pLeader->SetMaxForce(Prm.MaxSteeringForce);
           m_vCrosshair.x = player->Pos().x;
           m_vCrosshair.y = (player->Pos().y) + 1000;
       }
@@ -340,6 +383,8 @@ void GameWorld::HandleKeyPresses(WPARAM wParam)
   case 'A': {
       if (pLeader->isHumanOn())
       {
+          pLeader->SetMaxSpeed(Prm.MaxSpeed);
+          pLeader->SetMaxForce(Prm.MaxSteeringForce);
           m_vCrosshair.x = (player->Pos().x) -1000;
           m_vCrosshair.y = player->Pos().y;
       }
@@ -349,6 +394,8 @@ void GameWorld::HandleKeyPresses(WPARAM wParam)
   case 'D': {
       if (pLeader->isHumanOn())
       {
+          pLeader->SetMaxSpeed(Prm.MaxSpeed);
+          pLeader->SetMaxForce(Prm.MaxSteeringForce);
           m_vCrosshair.x = (player->Pos().x) + 1000;
           m_vCrosshair.y = player->Pos().y;
       }
@@ -612,6 +659,9 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
       case ID_CHANGEMODE_IAWANDER:
           pLeader->ToggleWandering();
+          pLeader->SetMaxSpeed(Prm.MaxSpeed);
+          pLeader->SetMaxForce(Prm.MaxSteeringForce);
+         
           CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAWANDER, pLeader->isWanderOn());
           CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAFLOCKING, pLeader->isFlockingOn());
           CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_HUMAN, pLeader->isHumanOn());
@@ -620,6 +670,9 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
       case ID_CHANGEMODE_IAFLOCKING:
           pLeader->ToggleFlocking();
+          pLeader->SetMaxSpeed(Prm.MaxSpeed);
+          pLeader->SetMaxForce(Prm.MaxSteeringForce);
+         
           CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAWANDER, pLeader->isWanderOn());
           CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_IAFLOCKING, pLeader->isFlockingOn());
           CheckMenuItemAppropriately(hwnd, ID_CHANGEMODE_HUMAN, pLeader->isHumanOn());

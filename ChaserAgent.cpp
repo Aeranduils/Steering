@@ -32,6 +32,10 @@ ChaserAgent::ChaserAgent(GameWorld* world,
 
     Steering()->OffsetPursuitOn(pLeader, offset);
     Steering()->SeparationOn();
+    
+    if (Steering()->isArriveOn()) {
+        ChaserAgent::SetMaxForce(0);
+    }
     //Steering()->SetSummingMethod(Steering()->weighted_average);
 }
 
@@ -41,5 +45,13 @@ ChaserAgent::ChaserAgent(GameWorld* world,
 ChaserAgent::~ChaserAgent()
 {
     delete m_pSteering;
+}
+
+void ChaserAgent::setOffset(Vector2D offset) {
+    ChaserAgent::offset = offset;
+}
+
+void ChaserAgent::setLeader(Vehicle* leader) {
+    ChaserAgent::leader = leader;
 }
 
