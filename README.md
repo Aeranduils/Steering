@@ -14,7 +14,8 @@
  - Différentes couleurs pour identifier les types d'agents
 
 #-----Problèmes non résolues-----#
- Actuellement pour repasser du mode Humain a un mode de poursuite en queue il faut utiliser la touche R afin de "reset" le gameworld. 
+
+ - Actuellement pour repasser du mode Humain a un mode de poursuite en queue il faut utiliser la touche R afin de "reset" le gameworld. 
  Pour avoir le Wander et le Flocking en ligne il faut donc ne jamais passer par Humain ou devoir reset avec R.
  Cependant cela laisse aussi le choix de pouvoir utiliser le Wander et le Flocking en mode protecteur (en cercle autour du leader)
  Pour cela il faut d'abord passer par Humain puis choisir Wander ou Flocking dans le menu.
