@@ -24,6 +24,7 @@ Vehicle* player;
 LeaderAgent* pLeader;
 bool isHumanAlready = false;
 
+
 //------------------------------- ctor -----------------------------------
 //------------------------------------------------------------------------
 GameWorld::GameWorld(int cx, int cy) :
