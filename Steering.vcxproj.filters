@@ -2,19 +2,19 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{47211928-e448-44a1-b623-3db15667458a}</UniqueIdentifier>
+      <UniqueIdentifier>{312781ff-c634-427c-b966-ed83c935cb60}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{30c8aa81-c0b6-46e7-b5be-6eae142900c3}</UniqueIdentifier>
+      <UniqueIdentifier>{961c06c8-faa3-4fa5-b445-01bcc27c5dde}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{08cb0c67-6774-4f81-9468-563346b3025e}</UniqueIdentifier>
+      <UniqueIdentifier>{2b1a0348-0242-4cbe-9bc8-dbeb0fe475e5}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
     <Filter Include="misc">
-      <UniqueIdentifier>{a4732bd9-ae9a-4bb3-83e6-bef91ea1f4ec}</UniqueIdentifier>
+      <UniqueIdentifier>{71e07f80-63b5-4490-a12d-06934d5b5e64}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -53,12 +53,6 @@
     </ClCompile>
     <ClCompile Include="..\Common\misc\WindowUtils.cpp">
       <Filter>misc</Filter>
-    </ClCompile>
-    <ClCompile Include="LeaderAgent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ChaserAgent.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,12 +130,6 @@
     </ClInclude>
     <ClInclude Include="..\Common\misc\WindowUtils.h">
       <Filter>misc</Filter>
-    </ClInclude>
-    <ClInclude Include="LeaderAgent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChaserAgent.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

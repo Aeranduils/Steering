@@ -2,7 +2,7 @@
 #define GAME_ENTITY_FUNCTION_TEMPLATES
 
 #include "BaseGameEntity.h"
-#include "2d/geometry.h"
+#include "Common/2d/geometry.h"
 
 
 

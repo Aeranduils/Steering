@@ -3,26 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31727.386
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Steering", "Steering.vcxproj", "{24CA9EB4-20EB-460E-AF54-11F7B8850F03}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Steering", "Steering.vcxproj", "{B5048F26-9A03-4079-AAC5-C9FEFEC04D9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
-		Template|x86 = Template|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{24CA9EB4-20EB-460E-AF54-11F7B8850F03}.Debug|x86.ActiveCfg = Debug|Win32
-		{24CA9EB4-20EB-460E-AF54-11F7B8850F03}.Debug|x86.Build.0 = Debug|Win32
-		{24CA9EB4-20EB-460E-AF54-11F7B8850F03}.Release|x86.ActiveCfg = Release|Win32
-		{24CA9EB4-20EB-460E-AF54-11F7B8850F03}.Release|x86.Build.0 = Release|Win32
-		{24CA9EB4-20EB-460E-AF54-11F7B8850F03}.Template|x86.ActiveCfg = Template|Win32
-		{24CA9EB4-20EB-460E-AF54-11F7B8850F03}.Template|x86.Build.0 = Template|Win32
+		{B5048F26-9A03-4079-AAC5-C9FEFEC04D9C}.Debug|x86.ActiveCfg = Debug|Win32
+		{B5048F26-9A03-4079-AAC5-C9FEFEC04D9C}.Debug|x86.Build.0 = Debug|Win32
+		{B5048F26-9A03-4079-AAC5-C9FEFEC04D9C}.Release|x86.ActiveCfg = Release|Win32
+		{B5048F26-9A03-4079-AAC5-C9FEFEC04D9C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {BB28B9DC-78F3-478D-A179-1F809E25032E}
+		SolutionGuid = {E6BE5026-65F0-4F97-B999-D3EC3C8BCBA1}
 	EndGlobalSection
 EndGlobal

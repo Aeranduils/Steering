@@ -22,9 +22,9 @@
 #include <list>
 #include <cassert>
 
-#include "2d/Vector2D.h"
-#include "2d/InvertedAABBox2D.h"
-#include "misc/utils.h"
+#include "Common/2d/Vector2D.h"
+#include "Common/2d/InvertedAABBox2D.h"
+#include "Common/misc/utils.h"
 
 
 
